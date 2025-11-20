@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система управления оценками</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .nav-btn {
+            background: white;
+            color: #667eea;
+            padding: 20px 40px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        .icon {
+            font-size: 2em;
+        }
+        .info-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+        .info-card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .info-card p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Система управления оценками и классами</h1>
+
+        <div class="nav-buttons">
+            <a href="/grades" class="nav-btn">
+                <span class="icon">📝</span>
+                <span>Оценки</span>
+            </a>
+            <a href="/classes" class="nav-btn">
+                <span class="icon">🎓</span>
+                <span>Классы</span>
+            </a>
+        </div>
+
+        <div class="info-card">
+            <h2>Добро пожаловать!</h2>
+            <p>Эта система позволяет управлять оценками студентов и классами.</p>
+            <p><strong>Функциональность:</strong></p>
+            <p>• Просмотр всех оценок и классов</p>
+            <p>• Добавление новых оценок и классов</p>
+            <p>• Удаление записей</p>
+            <p>• Поиск по различным параметрам</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление оценками</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px 0;
+        }
+        h1 {
+            color: white;
+            font-size: 2.2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .nav-btn {
+            background: white;
+            color: #667eea;
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 30px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .card-title {
+            color: #667eea;
+            font-size: 1.8em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 16px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+        th {
+            background-color: #f8f9ff;
+            font-weight: 600;
+            color: #5a64ff;
+        }
+        tr:hover {
+            background-color: #f9f9ff;
+        }
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+        .delete-btn:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+        .form-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e1e5ff;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: fit-content;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #777;
+        }
+        .empty-state p {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        @media (max-width: 768px) {
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 Управление оценками</h1>
+            <a href="/" class="nav-btn">🏠 На главную</a>
+        </header>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Список оценок</h2>
+            </div>
+            <div id="grades-table-container">
+                <table id="grades-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ученик</th>
+                            <th>Предмет</th>
+                            <th>Оценка</th>
+                            <th>Дата</th>
+                            <th>Преподаватель</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="grades-body">
+                        <!-- Данные будут загружены через JavaScript -->
+                    </tbody>
+                </table>
+                <div id="empty-grades" class="empty-state" style="display: none;">
+                    <div>📭 Нет оценок</div>
+                    <p>Добавьте первую оценку через форму ниже</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Добавить новую оценку</h2>
+            </div>
+            <form id="add-grade-form">
+                <div class="form-group">
+                    <div>
+                        <label for="name">Имя ученика:</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div>
+                        <label for="subject">Предмет:</label>
+                        <input type="text" id="subject" required>
+                    </div>
+                    <div>
+                        <label for="grade">Оценка:</label>
+                        <select id="grade" required>
+                            <option value="5">5 (Отлично)</option>
+                            <option value="4">4 (Хорошо)</option>
+                            <option value="3">3 (Удовлетворительно)</option>
+                            <option value="2">2 (Неудовлетворительно)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="date">Дата:</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div>
+                        <label for="teacher">Преподаватель:</label>
+                        <input type="text" id="teacher" required>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">➕ Добавить оценку</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGrades();
+
+            document.getElementById('add-grade-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const newGrade = {
+                    name: document.getElementById('name').value,
+                    subject: document.getElementById('subject').value,
+                    grade: document.getElementById('grade').value,
+                    date: document.getElementById('date').value,
+                    teacher: document.getElementById('teacher').value
+                };
+
+                try {
+                    const response = await fetch('/api/grades', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(newGrade)
+                    });
+
+                    if (response.ok) {
+                        loadGrades();
+                        document.getElementById('add-grade-form').reset();
+                        alert('Оценка успешно добавлена!');
+                    } else {
+                        const error = await response.json();
+                        alert(`Ошибка: ${error.detail || 'Не удалось добавить оценку'}`);
+                    }
+                } catch (error) {
+                    alert(`Произошла ошибка: ${error.message}`);
+                }
+            });
+
+            async function loadGrades() {
+                try {
+                    const response = await fetch('/api/grades');
+                    const grades = await response.json();
+
+                    const tableBody = document.getElementById('grades-body');
+                    const emptyState = document.getElementById('empty-grades');
+                    const tableContainer = document.getElementById('grades-table-container');
+
+                    if (grades.length === 0) {
+                        emptyState.style.display = 'block';
+                        tableContainer.style.display = 'none';
+                        return;
+                    }
+
+                    emptyState.style.display = 'none';
+                    tableContainer.style.display = 'block';
+
+                    tableBody.innerHTML = grades.map(grade => `
+                        <tr>
+                            <td>${grade.id}</td>
+                            <td>${grade.name}</td>
+                            <td>${grade.subject}</td>
+                            <td><strong>${grade.grade}</strong></td>
+                            <td>${new Date(grade.date).toLocaleDateString('ru-RU')}</td>
+                            <td>${grade.teacher}</td>
+                            <td>
+                                <button class="action-btn delete-btn" onclick="deleteGrade(${grade.id})">
+                                    🗑️ Удалить
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                } catch (error) {
+                    console.error('Ошибка загрузки оценок:', error);
+                    alert('Не удалось загрузить оценки');
+                }
+            }
+
+            window.deleteGrade = async (id) => {
+                if (!confirm('Вы уверены, что хотите удалить эту оценку?')) return;
+
+                try {
+                    const response = await fetch(`/api/grades/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        loadGrades();
+                        alert('Оценка успешно удалена');
+                    } else {
+                        const error = await response.json();
+                        alert(`Ошибка: ${error.ERROR || 'Не удалось удалить оценку'}`);
+                    }
+                } catch (error) {
+                    alert(`Произошла ошибка: ${error.message}`);
+                }
+            };
+        });
+    </script>
+</body>
+</html>

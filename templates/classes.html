@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление классами</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px 0;
+        }
+        h1 {
+            color: white;
+            font-size: 2.2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .nav-btn {
+            background: white;
+            color: #11998e;
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 30px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .card-title {
+            color: #11998e;
+            font-size: 1.8em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 16px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+        th {
+            background-color: #f0fdfa;
+            font-weight: 600;
+            color: #0d9488;
+        }
+        tr:hover {
+            background-color: #f8feff;
+        }
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+        .delete-btn:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+        .form-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #a7f3d0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #11998e;
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: fit-content;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(17, 153, 142, 0.4);
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(17, 153, 142, 0.6);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #777;
+        }
+        .empty-state p {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        .students-list {
+            max-width: 300px;
+            list-style-type: none;
+            padding-left: 10px;
+        }
+        .students-list li {
+            padding: 3px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        @media (max-width: 768px) {
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Управление классами</h1>
+            <a href="/" class="nav-btn">🏠 На главную</a>
+        </header>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Список классов</h2>
+            </div>
+            <div id="classes-table-container">
+                <table id="classes-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Код класса</th>
+                            <th>Учебный год</th>
+                            <th>Классный руководитель</th>
+                            <th>Ученики</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="classes-body">
+                        <!-- Данные будут загружены через JavaScript -->
+                    </tbody>
+                </table>
+                <div id="empty-classes" class="empty-state" style="display: none;">
+                    <div>📭 Нет классов</div>
+                    <p>Добавьте первый класс через форму ниже</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Добавить новый класс</h2>
+            </div>
+            <form id="add-class-form">
+                <div class="form-group">
+                    <div>
+                        <label for="code">Код класса:</label>
+                        <input type="text" id="code" placeholder="Например: 10А" required>
+                    </div>
+                    <div>
+                        <label for="year">Учебный год:</label>
+                        <input type="text" id="year" placeholder="Например: 2023-2024" required>
+                    </div>
+                    <div>
+                        <label for="super_teacher">Классный руководитель:</label>
+                        <input type="text" id="super_teacher" required>
+                    </div>
+                    <div style="grid-column: span 2;">
+                        <label for="students">Список учеников (по одному на строку):</label>
+                        <textarea id="students" placeholder="Иванов Иван&#10;Петров Петр&#10;Сидорова Мария" required></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">➕ Добавить класс</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadClasses();
+
+            document.getElementById('add-class-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Разбиваем список учеников на массив
+                const studentsList = document.getElementById('students').value
+                    .split('\n')
+                    .map(s => s.trim())
+                    .filter(s => s);
+
+                const newClass = {
+                    code: document.getElementById('code').value,
+                    students: studentsList,
+                    year: document.getElementById('year').value,
+                    super_teacher: document.getElementById('super_teacher').value
+                };
+
+                try {
+                    const response = await fetch('/api/classes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(newClass)
+                    });
+
+                    if (response.ok) {
+                        loadClasses();
+                        document.getElementById('add-class-form').reset();
+                        alert('Класс успешно добавлен!');
+                    } else {
+                        const error = await response.json();
+                        alert(`Ошибка: ${error.detail || 'Не удалось добавить класс'}`);
+                    }
+                } catch (error) {
+                    alert(`Произошла ошибка: ${error.message}`);
+                }
+            });
+
+            async function loadClasses() {
+                try {
+                    const response = await fetch('/api/classes');
+                    const classes = await response.json();
+
+                    const tableBody = document.getElementById('classes-body');
+                    const emptyState = document.getElementById('empty-classes');
+                    const tableContainer = document.getElementById('classes-table-container');
+
+                    if (classes.length === 0) {
+                        emptyState.style.display = 'block';
+                        tableContainer.style.display = 'none';
+                        return;
+                    }
+
+                    emptyState.style.display = 'none';
+                    tableContainer.style.display = 'block';
+
+                    tableBody.innerHTML = classes.map(cls => `
+                        <tr>
+                            <td>${cls.id}</td>
+                            <td><strong>${cls.code}</strong></td>
+                            <td>${cls.year}</td>
+                            <td>${cls.super_teacher}</td>
+                            <td>
+                                <ul class="students-list">
+                                    ${cls.students.slice(0, 3).map(student => `<li>${student}</li>`).join('')}
+                                    ${cls.students.length > 3 ? `<li>+${cls.students.length - 3} учеников</li>` : ''}
+                                </ul>
+                            </td>
+                            <td>
+                                <button class="action-btn delete-btn" onclick="deleteClass(${cls.id})">
+                                    🗑️ Удалить
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                } catch (error) {
+                    console.error('Ошибка загрузки классов:', error);
+                    alert('Не удалось загрузить классы');
+                }
+            }
+
+            window.deleteClass = async (id) => {
+                if (!confirm('Вы уверены, что хотите удалить этот класс? ВСЕ ДАННЫЕ БУДУТ УТЕРЯНЫ!')) return;
+
+                try {
+                    const response = await fetch(`/api/classes/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        loadClasses();
+                        alert('Класс успешно удалён');
+                    } else {
+                        const error = await response.json();
+                        alert(`Ошибка: ${error.ERROR || 'Не удалось удалить класс'}`);
+                    }
+                } catch (error) {
+                    alert(`Произошла ошибка: ${error.message}`);
+                }
+            };
+        });
+    </script>
+</body>
+</html>
